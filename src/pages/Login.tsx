@@ -94,15 +94,9 @@ const Login = () => {
               </Button>
             </div>
           </form>
-          <p className="text-muted-foreground text-sm text-center">
-            New user?
-            <Link
-              className={buttonVariants({
-                variant: "link",
-                className: "px-1",
-              })}
-              to={"/sign-up"}
-            >
+          <p className="text-muted-foreground text-sm text-center py-2">
+            New User?{" "}
+            <Link to={"/sign-up"} className="text-primary hover:underline">
               Create account
             </Link>
           </p>

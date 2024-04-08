@@ -2,6 +2,7 @@ import { Movie } from "@/types";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
+import LoadingCard from "./loading-card";
 import MovieCard from "./movie-card";
 
 const MoviesList = () => {
@@ -18,7 +19,6 @@ const MoviesList = () => {
           genre: "all",
           sort: "voting",
         });
-        console.log(data.result);
         setLoading(false);
         setData(data.result);
       } catch (error) {
@@ -29,8 +29,10 @@ const MoviesList = () => {
     fetchData();
   }, []);
 
+  const loadingCards = new Array(5).fill(null);
+
   return (
-    <section className="max-w-md mx-auto py-8 lg:py-12 gap-4 flex flex-col">
+    <section className="md:max-w-md mx-auto py-8 lg:py-12 gap-4 flex flex-col w-[95%]">
       {data?.map((movie) => (
         <MovieCard
           key={movie._id}
@@ -54,6 +56,7 @@ const MoviesList = () => {
           description={movie.description}
         />
       ))}
+      {loading && loadingCards.map((_, index) => <LoadingCard key={index} />)}
     </section>
   );
 };

@@ -1,4 +1,4 @@
-import { Button, buttonVariants } from "@/components/ui/button";
+import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -47,7 +47,7 @@ const Signup = () => {
 
   const onSubmit: SubmitHandler<FieldValues> = (data) => {
     if (data.confirmPassword !== data.password) {
-      toast.error("Passwords do not match!");
+      toast.info("Passwords do not match!");
       return;
     }
 
@@ -205,15 +205,9 @@ const Signup = () => {
               </Button>
             </div>
           </form>
-          <p className="text-muted-foreground text-sm text-center">
-            Already have an account?
-            <Link
-              className={buttonVariants({
-                variant: "link",
-                className: "px-1",
-              })}
-              to={"/login"}
-            >
+          <p className="text-muted-foreground text-sm text-center py-2">
+            Already have an account?{" "}
+            <Link to={"/login"} className="text-primary hover:underline">
               Login
             </Link>
           </p>

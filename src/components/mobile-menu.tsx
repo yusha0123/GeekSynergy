@@ -1,5 +1,5 @@
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { Menu } from "lucide-react";
+import { Info, LogOut, Menu } from "lucide-react";
 import Icon from "./Icon";
 import { Button } from "./ui/button";
 import useAuthContext from "@/hooks/useAuthContext";
@@ -24,12 +24,28 @@ const MobileMenu = () => {
           </h1>
         </div>
         <div className="flex flex-col gap-3 py-6">
-          <Button variant={"link"} onClick={onOpen}>
-            Company Info
-          </Button>
-          <Button variant={"link"} onClick={logout}>
-            Logout
-          </Button>
+          <div
+            className="relative flex items-center py-2 px-3 my-1
+        font-medium rounded-md cursor-pointer
+        transition-colors group focus:outline-none hover:bg-gray-300 text-gray-600"
+            onClick={onOpen}
+          >
+            <Info className="w-4 h-4" />
+            <span className="overflow-hidden transition-all ml-3 flex-1">
+              Company Info
+            </span>
+          </div>
+          <div
+            className="relative flex items-center py-2 px-3 my-1
+        font-medium rounded-md cursor-pointer
+        transition-colors group focus:outline-none hover:bg-gray-300 text-gray-600"
+            onClick={logout}
+          >
+            <LogOut className="w-4 h-4" />
+            <span className="overflow-hidden transition-all ml-3 flex-1">
+              Logout
+            </span>
+          </div>
         </div>
       </SheetContent>
     </Sheet>
