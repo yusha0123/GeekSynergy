@@ -210,7 +210,7 @@ const Signup = () => {
             <Link
               className={buttonVariants({
                 variant: "link",
-                className: "px-0.5",
+                className: "px-1",
               })}
               to={"/login"}
             >

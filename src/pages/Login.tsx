@@ -20,15 +20,12 @@ const Login = () => {
     },
   });
 
-  const simulateLoading = () => {
+  const onSubmit: SubmitHandler<FieldValues> = async (data) => {
     isLoading(true);
-    setTimeout(() => {
-      isLoading(false);
-    }, 1500);
-  };
 
-  const onSubmit: SubmitHandler<FieldValues> = (data) => {
-    simulateLoading();
+    await new Promise((resolve) => {
+      setTimeout(resolve, 1500); // Wait for 1.5 seconds
+    });
 
     const storedUsers: AllUsers = JSON.parse(
       localStorage.getItem("users") || "[]"
@@ -40,13 +37,13 @@ const Login = () => {
 
     if (!user || user.password !== data.password) {
       toast.error("Invalid credentials!");
+      isLoading(false);
       return;
     }
 
     login(user);
     toast.success("Logged in successfully!");
   };
-
   return (
     <div className="min-h-[100dvh] flex items-center justify-center bg-gray-50">
       <Card className="sm:mx-auto sm:w-full sm:max-w-md">
@@ -102,7 +99,7 @@ const Login = () => {
             <Link
               className={buttonVariants({
                 variant: "link",
-                className: "px-0.5",
+                className: "px-1",
               })}
               to={"/sign-up"}
             >

@@ -1,9 +1,11 @@
+import MoviesList from "@/components/movies-list";
 import Navbar from "@/components/Navbar";
 
 const Home = () => {
   return (
-    <main>
+    <main className="w-full">
       <Navbar />
+      <MoviesList />
     </main>
   );
 };
