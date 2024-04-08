@@ -1,9 +1,7 @@
-import { TextFieldError } from "@/components/Text-Field-Error";
+import { Button, buttonVariants } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useState } from "react";
-import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 import {
   Select,
   SelectContent,
@@ -11,27 +9,25 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Button } from "@/components/ui/button";
 import { Eye, EyeOff } from "lucide-react";
+import { useState } from "react";
+import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
+import { Link } from "react-router-dom";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { AlertTriangle } from "lucide-react";
 
 const Signup = () => {
   const [loading, isLoading] = useState(false);
   const [showPass1, setShowPass1] = useState(false);
   const [showPass2, setShowPass2] = useState(false);
+  const [error, setError] = useState(false);
   const [profession, setProfession] = useState<string>("");
-  const {
-    register,
-    handleSubmit,
-    reset,
-    getValues,
-    formState: { errors },
-  } = useForm<FieldValues>({
+  const { register, handleSubmit, reset } = useForm<FieldValues>({
     defaultValues: {
       name: "",
       email: "",
       password: "",
       phoneNumber: "",
-      profession: "",
       confirmPassword: "",
     },
   });
@@ -49,7 +45,15 @@ const Signup = () => {
     "Graphic Designer",
   ];
 
-  const onSubmit: SubmitHandler<FieldValues> = (data) => {};
+  const onSubmit: SubmitHandler<FieldValues> = (data) => {
+    if (data.confirmPassword !== data.password) {
+      setError(true);
+      return;
+    } else {
+      setError(false);
+    }
+    console.log(data);
+  };
 
   return (
     <div className="min-h-[100dvh] flex items-center justify-center bg-gray-50">
@@ -59,6 +63,15 @@ const Signup = () => {
             Create your account
           </CardTitle>
         </CardHeader>
+        {error && (
+          <div className="max-w-xs py-2 mx-auto">
+            <Alert variant="destructive">
+              <AlertTriangle className="h-4 w-4" />
+              <AlertTitle>Error</AlertTitle>
+              <AlertDescription>Passwords doesn't match</AlertDescription>
+            </Alert>
+          </div>
+        )}
         <CardContent>
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-3">
             <div className="grid md:grid-cols-2 gap-4">
@@ -69,15 +82,9 @@ const Signup = () => {
                   placeholder="Your name"
                   autoComplete="off"
                   disabled={loading}
-                  {...register("name", {
-                    required: "Name is Required",
-                    minLength: {
-                      value: 4,
-                      message: "Enter a valid name!",
-                    },
-                  })}
+                  required
+                  {...register("name")}
                 />
-                <TextFieldError error={errors.name?.message} />
               </div>
               <div className="space-y-1">
                 <Label htmlFor="email">Email</Label>
@@ -86,16 +93,9 @@ const Signup = () => {
                   placeholder="Your email address"
                   autoComplete="off"
                   disabled={loading}
-                  {...register("email", {
-                    required: "Email Address is required",
-                    pattern: {
-                      value:
-                        /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/,
-                      message: "Please enter a valid email address",
-                    },
-                  })}
+                  required
+                  {...register("email")}
                 />
-                <TextFieldError error={errors.email?.message} />
               </div>
               <div className="space-y-1">
                 <Label htmlFor="phone">Phone</Label>
@@ -104,24 +104,16 @@ const Signup = () => {
                   placeholder="Your Phone Number"
                   autoComplete="off"
                   disabled={loading}
-                  {...register("phoneNumber", {
-                    required: "Phone Number is required",
-                    minLength: {
-                      value: 10,
-                      message: "Enter a valid phone number!",
-                    },
-                  })}
+                  required
+                  {...register("phoneNumber")}
                 />
-                <TextFieldError error={errors.phoneNumber?.message} />
               </div>
               <div className="space-y-1">
                 <Label htmlFor="profession">Profession</Label>
                 <Select
+                  required
                   value={profession}
                   onValueChange={(value) => setProfession(value)}
-                  {...register("profession", {
-                    required: "Profession is Required",
-                  })}
                 >
                   <SelectTrigger className="w-full md:max-w-xs xl:max-w-md">
                     <SelectValue placeholder="Choose your profession" />
@@ -134,23 +126,17 @@ const Signup = () => {
                     ))}
                   </SelectContent>
                 </Select>
-                <TextFieldError error={errors.profession?.message} />
               </div>
               <div className="space-y-1">
                 <Label htmlFor="password">Password</Label>
                 <div className="relative">
                   <Input
                     type={showPass1 ? "text" : "password"}
-                    placeholder="********"
+                    placeholder="Choose a password"
                     autoComplete="off"
                     disabled={loading}
-                    {...register("password", {
-                      required: "Password is required",
-                      minLength: {
-                        value: 8,
-                        message: "Password must be at least 8 characters",
-                      },
-                    })}
+                    required
+                    {...register("password")}
                   />
                   <Button
                     size={"icon"}
@@ -166,22 +152,17 @@ const Signup = () => {
                     )}
                   </Button>
                 </div>
-                <TextFieldError error={errors.password?.message} />
               </div>
               <div className="space-y-1">
                 <Label htmlFor="password">Confirm Password</Label>
                 <div className="relative">
                   <Input
+                    required
                     type={showPass2 ? "text" : "password"}
-                    placeholder="********"
+                    placeholder="Confirm your password"
                     autoComplete="off"
                     disabled={loading}
-                    {...register("confirmPassword", {
-                      required: "Password confirmation is required",
-                      validate: (value) =>
-                        value === getValues("password") ||
-                        "Passwords must match",
-                    })}
+                    {...register("confirmPassword")}
                   />
                   <Button
                     size={"icon"}
@@ -197,7 +178,6 @@ const Signup = () => {
                     )}
                   </Button>
                 </div>
-                <TextFieldError error={errors.confirmPassword?.message} />
               </div>
             </div>
             <div className="flex items-center py-2">
@@ -210,6 +190,15 @@ const Signup = () => {
               </Button>
             </div>
           </form>
+          <p className="text-muted-foreground text-sm text-center">
+            Already have an account?
+            <Link
+              className={buttonVariants({ variant: "link", className: "px-1" })}
+              to={"/login"}
+            >
+              Login
+            </Link>
+          </p>
         </CardContent>
       </Card>
     </div>
