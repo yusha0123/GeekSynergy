@@ -9,20 +9,19 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { User } from "@/types";
 import { Eye, EyeOff } from "lucide-react";
 import { useState } from "react";
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
-import { Link } from "react-router-dom";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { AlertTriangle } from "lucide-react";
+import { Link, useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 
 const Signup = () => {
   const [loading, isLoading] = useState(false);
   const [showPass1, setShowPass1] = useState(false);
   const [showPass2, setShowPass2] = useState(false);
-  const [error, setError] = useState(false);
   const [profession, setProfession] = useState<string>("");
-  const { register, handleSubmit, reset } = useForm<FieldValues>({
+  const { register, handleSubmit } = useForm<FieldValues>({
     defaultValues: {
       name: "",
       email: "",
@@ -31,6 +30,7 @@ const Signup = () => {
       confirmPassword: "",
     },
   });
+  const navigate = useNavigate();
 
   const professions = [
     "Doctor",
@@ -47,12 +47,36 @@ const Signup = () => {
 
   const onSubmit: SubmitHandler<FieldValues> = (data) => {
     if (data.confirmPassword !== data.password) {
-      setError(true);
+      toast.error("Passwords do not match!");
       return;
-    } else {
-      setError(false);
     }
-    console.log(data);
+
+    // Remove confirmPassword field from newUser object
+    const { confirmPassword, ...userData } = data;
+
+    const storedUsers = JSON.parse(localStorage.getItem("users") || "[]");
+    const userExists = storedUsers.some(
+      (user: User) =>
+        user.email === data.email || user.phoneNumber === data.phoneNumber
+    );
+
+    if (userExists) {
+      toast.error("User already exists!");
+      return;
+    }
+
+    const newUser = {
+      ...userData,
+      profession,
+    };
+
+    isLoading(true);
+    setTimeout(() => {
+      localStorage.setItem("users", JSON.stringify([...storedUsers, newUser]));
+      isLoading(false);
+      toast.success("User registered successfully!");
+      navigate("/login");
+    }, 2000);
   };
 
   return (
@@ -63,18 +87,9 @@ const Signup = () => {
             Create your account
           </CardTitle>
         </CardHeader>
-        {error && (
-          <div className="max-w-xs py-2 mx-auto">
-            <Alert variant="destructive">
-              <AlertTriangle className="h-4 w-4" />
-              <AlertTitle>Error</AlertTitle>
-              <AlertDescription>Passwords doesn't match</AlertDescription>
-            </Alert>
-          </div>
-        )}
         <CardContent>
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-3">
-            <div className="grid md:grid-cols-2 gap-4">
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <div className="grid md:grid-cols-2 gap-3">
               <div className="space-y-1">
                 <Label htmlFor="name">Name</Label>
                 <Input
@@ -180,7 +195,7 @@ const Signup = () => {
                 </div>
               </div>
             </div>
-            <div className="flex items-center py-2">
+            <div className="flex items-center pt-4">
               <Button
                 className="w-full max-w-sm mx-auto"
                 type="submit"
@@ -193,7 +208,10 @@ const Signup = () => {
           <p className="text-muted-foreground text-sm text-center">
             Already have an account?
             <Link
-              className={buttonVariants({ variant: "link", className: "px-1" })}
+              className={buttonVariants({
+                variant: "link",
+                className: "px-0.5",
+              })}
               to={"/login"}
             >
               Login
