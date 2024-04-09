@@ -1,4 +1,5 @@
-import { Button, buttonVariants } from "@/components/ui/button";
+import SvgComponent from "@/components/Icon";
+import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import useAuthContext from "@/hooks/useAuthContext";
@@ -48,6 +49,7 @@ const Login = () => {
     <div className="min-h-[100dvh] flex items-center justify-center bg-gray-50">
       <Card className="sm:mx-auto sm:w-full sm:max-w-md">
         <CardHeader className="space-y-1">
+          <SvgComponent className="h-12 w-12 mx-auto" />
           <CardTitle className="text-3xl tracking-tight font-bold text-gray-900 text-center">
             Login to your account
           </CardTitle>
@@ -96,7 +98,10 @@ const Login = () => {
           </form>
           <p className="text-muted-foreground text-sm text-center py-2">
             New User?{" "}
-            <Link to={"/sign-up"} className="text-primary hover:underline">
+            <Link
+              to="/sign-up"
+              className="text-primary hover:underline transition duration-300 ease-in-out"
+            >
               Create account
             </Link>
           </p>

@@ -18,10 +18,14 @@ const InfoModal = () => {
             Company Info
           </DialogTitle>
           <DialogDescription className="p-3">
-            <p>Company: Geeksynergy Technologies Pvt Ltd</p>
-            <p>Address: Sanjayanagar, Bengaluru-56</p>
-            <p>Phone: XXXXXXXXX09</p>
-            <p>Email: XXXXXX@gmail.com</p>
+            <span className="mb-2 block">
+              Company: Geeksynergy Technologies Pvt Ltd
+            </span>
+            <span className="mb-2 block">
+              Address: Sanjayanagar, Bengaluru-56
+            </span>
+            <span className="mb-2 block">Phone: XXXXXXXXX09</span>
+            <span className="mb-2 block">Email: XXXXXX@gmail.com</span>
           </DialogDescription>
         </DialogHeader>
       </DialogContent>

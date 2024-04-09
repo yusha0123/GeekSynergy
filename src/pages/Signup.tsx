@@ -1,3 +1,4 @@
+import SvgComponent from "@/components/Icon";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -76,13 +77,14 @@ const Signup = () => {
       isLoading(false);
       toast.success("User registered successfully!");
       navigate("/login");
-    }, 2000);
+    }, 1500);
   };
 
   return (
-    <div className="min-h-[100dvh] flex items-center justify-center bg-gray-50">
+    <div className="min-h-[100dvh] flex flex-col justify-center bg-gray-50">
       <Card className="sm:mx-auto sm:w-full sm:max-w-md md:max-w-xl">
         <CardHeader className="space-y-1">
+          <SvgComponent className="h-12 w-12 mx-auto" />
           <CardTitle className="text-3xl tracking-tight font-bold text-gray-900 text-center">
             Create your account
           </CardTitle>
@@ -207,7 +209,10 @@ const Signup = () => {
           </form>
           <p className="text-muted-foreground text-sm text-center py-2">
             Already have an account?{" "}
-            <Link to={"/login"} className="text-primary hover:underline">
+            <Link
+              to={"/login"}
+              className="text-primary hover:underline transition duration-300 ease-in-out"
+            >
               Login
             </Link>
           </p>

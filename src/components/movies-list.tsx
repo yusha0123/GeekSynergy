@@ -32,7 +32,7 @@ const MoviesList = () => {
   const loadingCards = new Array(5).fill(null);
 
   return (
-    <section className="md:max-w-md mx-auto py-8 lg:py-12 gap-4 flex flex-col w-[95%]">
+    <section className="sm:max-w-sm md:max-w-md mx-auto py-6 md:py-8 lg:py-12 gap-4 flex flex-col px-2 sm:px-4 lg:max-w-lg">
       {data?.map((movie) => (
         <MovieCard
           key={movie._id}
